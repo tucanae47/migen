@@ -322,18 +322,16 @@ class GenericPlatform:
 
     # copy all source files to the build_dir to make them
     # self-contained. returns a new set.
-    def copy_sources(self, build_dir, subdir="imports"):
+    def copy_sources(self, build_dir, subdir="./imports"):
         copied_sources = set()
 
         for filename, language, library in self.sources:
-            path = _make_local_path(subdir, filename)
-
+            path = _make_local_path("/", filename)
             # source filenames are assumed relative to the build_dir
             src = os.path.join(build_dir, filename)
             # copy to path that starts with build_dir
-            dest = os.path.join(build_dir, path)
-            os.makedirs(os.path.dirname(dest), exist_ok=True)
-            shutil.copyfile(src, dest)
+            os.makedirs(os.path.dirname(subdir), exist_ok=True)
+            shutil.copyfile(src, subdir)
 
             # return entries relative to build_dir
             copied_sources.add((path, language, library))
